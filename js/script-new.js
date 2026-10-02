@@ -8,7 +8,7 @@
 'use strict';
 
 const CONFIG = {
-  CORRECT_PASSWORD: '11042000',
+  CORRECT_PASSWORD: '09061970',
   LOCK_ERROR_MESSAGES: [
     "Try our special date, my love (hint: 11042000)",
     "Think of the day that changed everything",
