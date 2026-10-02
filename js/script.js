@@ -26,7 +26,7 @@ const CONFIG = {
    * The "correct" password — a secret romantic code.
    * Change this to your chosen password/phrase.
    */
-  CORRECT_PASSWORD: '11042000',   // ← CHANGE THIS to your secret code
+  CORRECT_PASSWORD: '09061970',   // ← CHANGE THIS to your secret code
 
   /**
    * LOCK SCREEN MESSAGES
