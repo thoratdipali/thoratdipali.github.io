@@ -15,10 +15,46 @@
 </head>
 <body>
 
-  <!-- ========================================================
-       SECTION 0 — MOVIE OPENING (cinematic title-card sequence)
-       ======================================================== -->
-  <section id="movieOpening" class="movie-opening" aria-label="Opening scene">
+  <!-- LIGHTBOX -->
+  <div class="lightbox-overlay" id="lightboxOverlay" role="dialog" aria-modal="true" aria-label="Photo fullscreen">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&#x2715;</button>
+    <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+    <p class="lightbox-caption" id="lightboxCaption"></p>
+  </div>
+
+  <!-- LOVE STATS -->
+  <section id="loveStatsSection" class="love-stats-section hidden" aria-label="Our story in numbers">
+    <div class="love-stats-card">
+      <p class="love-stats-eyebrow">A story in numbers</p>
+      <h2 class="love-stats-title">Us, by the numbers ❤️</h2>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-item"><span class="stat-number" id="statDays">0</span><span class="stat-label">Days together</span></div>
+        <div class="stat-item"><span class="stat-number">10</span><span class="stat-label">Chapters of us</span></div>
+        <div class="stat-item"><span class="stat-number">1</span><span class="stat-label">Question to ask</span></div>
+        <div class="stat-item"><span class="stat-number">&infin;</span><span class="stat-label">Reasons I love you</span></div>
+      </div>
+      <button class="love-stats-continue-btn" id="loveStatsContinueBtn">Open our story ✦</button>
+    </div>
+  </section>
+
+  <!-- HEARTBEAT INTERSTITIAL -->
+  <div class="heartbeat-section" id="heartbeatSection" aria-hidden="true">
+    <div class="heartbeat-heart">❤️</div>
+    <p class="heartbeat-text">There is something I need to ask you…</p>
+    <p class="heartbeat-sub">I have been waiting for this moment.</p>
+  </div>
+
+  <!-- YES BURST OVERLAY -->
+  <div class="yes-burst-overlay" id="yesBurstOverlay" aria-hidden="true">
+    <p class="yes-burst-text">She said Yes ✨</p>
+    <p class="yes-burst-sub">Forever starts right now.</p>
+  </div>
+
+  <!-- SWIPE HINT -->
+  <p class="swipe-hint" id="swipeHint" aria-hidden="true">← swipe to navigate →</p>
+
+  <!-- SECTION 0 — MOVIE OPENING -->
+  <section id="movieOpening" class="movie-opening hidden" aria-label="Opening scene">
     <div class="film-grain" aria-hidden="true"></div>
     <div class="letterbox letterbox-top" aria-hidden="true"></div>
     <div class="letterbox letterbox-bottom" aria-hidden="true"></div>
@@ -34,25 +70,15 @@
     </div>
 
     <button class="movie-skip" id="movieSkip" aria-label="Skip the opening scene">Skip ⟶</button>
-  </section><!-- /#movieOpening -->
+  </section>
 
-  <!-- ========================================================
-       AMBIENT CANVAS — floating hearts / petals (behind everything)
-       ======================================================== -->
   <canvas id="ambientCanvas" aria-hidden="true"></canvas>
 
-  <!-- ========================================================
-       GLOBAL CINEMATIC GRADE — persistent film grain + vignette,
-       sits above every scene so the whole site reads as one film
-       ======================================================== -->
   <div class="cine-grade" aria-hidden="true"></div>
 
-  <!-- Reusable letterbox bars — flash in/out at every major scene cut -->
   <div class="scene-letterbox scene-letterbox-top" id="sceneLetterboxTop" aria-hidden="true"></div>
   <div class="scene-letterbox scene-letterbox-bottom" id="sceneLetterboxBottom" aria-hidden="true"></div>
 
-  <!-- Persistent background score — plays from the moment she steps in,
-       and fades out just before the proposal video takes over -->
   <audio id="bgAudio" loop preload="auto">
     <source src="song/Vaaroon%20Forever%20Mirzapur%20128%20Kbps.mp3" type="audio/mpeg" />
   </audio>
@@ -60,9 +86,6 @@
     <span class="music-icon" aria-hidden="true">♪</span>
   </button>
 
-  <!-- ========================================================
-       CHAPTER CARD OVERLAY — cinematic bridge into Chapter 1
-       ======================================================== -->
   <div class="chapter-card-overlay hidden" id="chapterCardOverlay" aria-hidden="true">
     <div class="chapter-card-glow" aria-hidden="true"></div>
     <p class="chapter-card-eyebrow" id="chapterCardEyebrow"></p>
@@ -70,28 +93,65 @@
     <p class="chapter-card-subtitle" id="chapterCardSubtitle"></p>
   </div>
 
-  <!-- ========================================================
-       SECTION 1 — LOCK SCREEN
-       ======================================================== -->
-  <section id="lockScreen" class="lock-screen hidden" aria-label="Entrance — unlock to continue">
+  <!-- WELCOME INTRO — plays before name screen -->
+  <section id="welcomeIntro" class="welcome-intro hidden" aria-label="Welcome introduction">
+    <canvas id="welcomeParticles" aria-hidden="true"></canvas>
+    <div class="welcome-content">
+      <div class="welcome-ornament" aria-hidden="true">
+        <svg viewBox="0 0 200 20" fill="none"><line x1="0" y1="10" x2="75" y2="10" stroke="#C9A76A" stroke-width="0.8"/><path d="M85 10 Q100 2 115 10 Q100 18 85 10Z" fill="#C9A76A" opacity="0.7"/><line x1="125" y1="10" x2="200" y2="10" stroke="#C9A76A" stroke-width="0.8"/></svg>
+      </div>
+      <p class="welcome-eyebrow" id="welcomeEyebrow"></p>
+      <h1 class="welcome-headline" id="welcomeHeadline"></h1>
+      <p class="welcome-sub" id="welcomeSub"></p>
+      <div class="welcome-cta hidden" id="welcomeCta">
+        <button class="welcome-btn" id="welcomeBtn">
+          <span class="welcome-btn-text">I'm ready ✦</span>
+          <span class="btn-shimmer" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+    <div class="welcome-floating-hearts" id="welcomeHearts" aria-hidden="true"></div>
+  </section>
 
-    <!-- Idle breathing glow ring -->
+  <!-- NAME MOMENT — revealed after welcome intro -->
+  <section id="nameScreen" class="lock-screen name-screen hidden" aria-label="A little hello">
+    <div class="lock-glow-ring" aria-hidden="true"></div>
+    <div class="locket-card" id="nameCard">
+      <div class="card-ornament top" aria-hidden="true">
+        <svg viewBox="0 0 200 20" fill="none"><line x1="0" y1="10" x2="75" y2="10" stroke="#C9A76A" stroke-width="0.8"/><path d="M85 10 Q100 2 115 10 Q100 18 85 10Z" fill="#C9A76A" opacity="0.7"/><line x1="125" y1="10" x2="200" y2="10" stroke="#C9A76A" stroke-width="0.8"/></svg>
+      </div>
+      <div class="name-floating-petals" id="namePetals" aria-hidden="true"></div>
+      <div class="lock-heading-container">
+        <h1 class="lock-heading" id="nameGreeting">Wait… before I continue ❤️</h1>
+        <p class="lock-subtext">I want to know who's reading this.</p>
+      </div>
+      <div class="password-wrapper">
+        <input type="text" id="nameInput" class="password-input name-input" placeholder="Whisper it to me…" maxlength="40" autocomplete="off" autocapitalize="words" spellcheck="false" aria-label="Say hello" />
+        <button class="unlock-btn" id="nameBtn" type="button">
+          <span class="btn-text">It's me 💌</span>
+          <span class="btn-shimmer" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="lock-message" id="nameMessage" role="status" aria-live="polite"></div>
+      <div class="card-ornament bottom" aria-hidden="true">
+        <svg viewBox="0 0 200 20" fill="none"><line x1="0" y1="10" x2="75" y2="10" stroke="#C9A76A" stroke-width="0.8"/><path d="M85 10 Q100 18 115 10 Q100 2 85 10Z" fill="#C9A76A" opacity="0.7"/><line x1="125" y1="10" x2="200" y2="10" stroke="#C9A76A" stroke-width="0.8"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 1 — LOCK SCREEN -->
+  <section id="lockScreen" class="lock-screen hidden" aria-label="Entrance — unlock to continue">
     <div class="lock-glow-ring" aria-hidden="true"></div>
 
-    <!-- Wax-seal locket card -->
     <div class="locket-card" id="locketCard" role="main">
-
-      <!-- Decorative SVG wax seal (animates on open) -->
       <div class="wax-seal" id="waxSeal" aria-hidden="true">
         <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="60" cy="60" r="54" fill="#7A1F35" stroke="#C9A76A" stroke-width="2"/>
           <circle cx="60" cy="60" r="44" fill="none" stroke="#C9A76A" stroke-width="1" stroke-dasharray="4 3"/>
-          <!-- Monogram / flourish -->
           <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle"
                 font-family="Great Vibes, cursive" font-size="36" fill="#E4C896">K</text>
           <text x="50%" y="70%" dominant-baseline="middle" text-anchor="middle"
                 font-family="Cormorant Garamond, serif" font-size="9" fill="#C9A76A" letter-spacing="3">& D</text>
-          <!-- Crack lines (hidden, revealed on success) -->
           <g id="sealCracks" class="seal-cracks" opacity="0">
             <line x1="60" y1="6" x2="48" y2="34" stroke="#FAF3E8" stroke-width="1.5"/>
             <line x1="60" y1="6" x2="75" y2="28" stroke="#FAF3E8" stroke-width="1"/>
@@ -100,7 +160,6 @@
         </svg>
       </div>
 
-      <!-- Top ornament -->
       <div class="card-ornament top" aria-hidden="true">
         <svg viewBox="0 0 200 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="10" x2="75" y2="10" stroke="#C9A76A" stroke-width="0.8"/>
@@ -109,13 +168,11 @@
         </svg>
       </div>
 
-      <!-- Romantic heading -->
       <div class="lock-heading-container">
         <h1 class="lock-heading" id="lockHeading">A Little Secret Awaits You…</h1>
         <p class="lock-subtext" id="lockSubtext">Only someone special knows the way in.</p>
       </div>
 
-      <!-- Password input -->
       <div class="password-wrapper">
         <input 
           type="password" 
@@ -125,20 +182,16 @@
           autocomplete="off"
           aria-label="Secret password"
         />
-        
-        <!-- Unlock button -->
         <button class="unlock-btn" id="unlockBtn" aria-label="Submit password to unlock">
           <span class="btn-text">Unlock ✨</span>
           <span class="btn-shimmer" aria-hidden="true"></span>
         </button>
       </div>
 
-      <!-- Error / try-again message -->
       <div class="lock-message" id="lockMessage" role="alert" aria-live="polite">
         <span class="lock-msg-text" id="lockMsgText"></span>
       </div>
 
-      <!-- Bottom ornament -->
       <div class="card-ornament bottom" aria-hidden="true">
         <svg viewBox="0 0 200 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="10" x2="75" y2="10" stroke="#C9A76A" stroke-width="0.8"/>
@@ -146,10 +199,8 @@
           <line x1="125" y1="10" x2="200" y2="10" stroke="#C9A76A" stroke-width="0.8"/>
         </svg>
       </div>
+    </div>
 
-    </div><!-- /.locket-card -->
-
-    <!-- Success overlay (shown after correct answer) -->
     <div class="lock-success" id="lockSuccess" aria-live="assertive">
       <div class="success-burst" aria-hidden="true">
         <span class="burst-ring"></span>
@@ -158,36 +209,26 @@
       </div>
       <p class="lock-success-text">It's you <span aria-label="smiling face with hearts">🥰</span></p>
     </div>
+  </section>
 
-  </section><!-- /#lockScreen -->
-
-
-  <!-- ========================================================
-       SECTION 2 — STORY (10 chapters)
-       ======================================================== -->
+  <!-- SECTION 2 — STORY (10 chapters) -->
   <section id="storySection" class="story-section hidden" aria-label="Our story">
 
-    <!-- Chapter progress bar -->
     <div class="story-progress" aria-label="Story progress">
       <div class="progress-track">
         <div class="progress-fill" id="progressFill"></div>
       </div>
-      <div class="progress-dots" id="progressDots" aria-hidden="true">
-        <!-- generated by JS -->
-      </div>
+      <div class="progress-dots" id="progressDots" aria-hidden="true"></div>
       <p class="progress-label" id="progressLabel" aria-live="polite">Chapter 1 of 10</p>
     </div>
 
-    <!-- Slides container -->
     <div class="slides-container" id="slidesContainer">
-
-      <!-- Each slide: data-chapter for JS, images map to img/photo1.jpg … -->
 
       <!-- CHAPTER 1 -->
       <div class="story-slide" data-chapter="1" aria-label="Chapter 1">
         <div class="slide-photo-frame">
-          <img src="img/photo1.jpg" alt="A memory from when we first met" class="slide-photo" loading="eager"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+          <img src="img/photo1.jpg" alt="The first meeting - February 16, 2026" class="slide-photo" loading="eager"
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/>
@@ -243,8 +284,8 @@ And for me, honestly that person is you.❤️‍🩹✨
       <!-- CHAPTER 2 -->
       <div class="story-slide" data-chapter="2" aria-label="Chapter 2">
         <div class="slide-photo-frame">
-          <img src="img/photo2.jpg" alt="Early nervous days" class="slide-photo" loading="eager"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+          <img src="img/photo2.jpg" alt="Early nervous days together" class="slide-photo" loading="eager"
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -263,8 +304,8 @@ And for me, honestly that person is you.❤️‍🩹✨
       <!-- CHAPTER 3 -->
       <div class="story-slide" data-chapter="3" aria-label="Chapter 3">
         <div class="slide-photo-frame">
-          <img src="img/photo3.jpg" alt="The first spark between us" class="slide-photo" loading="eager"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+          <img src="img/photo3.jpg" alt="The first spark between us" class="slide-photo" loading="lazy"
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -284,8 +325,8 @@ And for me, honestly that person is you.❤️‍🩹✨
       <!-- CHAPTER 4 -->
       <div class="story-slide" data-chapter="4" aria-label="Chapter 4">
         <div class="slide-photo-frame">
-          <img src="img/photo4.jpg" alt="Getting closer together" class="slide-photo" loading="eager"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+          <img src="img/photo4.jpg" alt="Getting closer together" class="slide-photo" loading="lazy"
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -304,8 +345,8 @@ And for me, honestly that person is you.❤️‍🩹✨
       <!-- CHAPTER 5 -->
       <div class="story-slide" data-chapter="5" aria-label="Chapter 5">
         <div class="slide-photo-frame">
-          <img src="img/photo5.jpg" alt="Navigating difficulty together" class="slide-photo" loading="eager"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+          <img src="img/photo5.jpg" alt="Navigating difficulty together" class="slide-photo" loading="lazy"
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -321,11 +362,12 @@ And for me, honestly that person is you.❤️‍🩹✨
         </div>
       </div>
 
-      <!-- CHAPTER 6 -->
+<!-- ======= END OF PART 1 — paste Part 2 directly below this line ======= -->
+       <!-- CHAPTER 6 -->
       <div class="story-slide" data-chapter="6" aria-label="Chapter 6">
         <div class="slide-photo-frame">
           <img src="img/photo6.jpg" alt="Becoming a team" class="slide-photo" loading="lazy"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -345,7 +387,7 @@ And for me, honestly that person is you.❤️‍🩹✨
       <div class="story-slide" data-chapter="7" aria-label="Chapter 7">
         <div class="slide-photo-frame">
           <img src="img/photo7.jpg" alt="Adventures together" class="slide-photo" loading="lazy"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -365,7 +407,7 @@ And for me, honestly that person is you.❤️‍🩹✨
       <div class="story-slide" data-chapter="8" aria-label="Chapter 8">
         <div class="slide-photo-frame">
           <img src="img/photo8.jpg" alt="Quiet everyday moments" class="slide-photo" loading="lazy"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -385,7 +427,7 @@ And for me, honestly that person is you.❤️‍🩹✨
       <div class="story-slide" data-chapter="9" aria-label="Chapter 9">
         <div class="slide-photo-frame">
           <img src="img/photo9.jpg" alt="The realization" class="slide-photo" loading="lazy"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -405,7 +447,7 @@ And for me, honestly that person is you.❤️‍🩹✨
       <div class="story-slide" data-chapter="10" aria-label="Chapter 10">
         <div class="slide-photo-frame">
           <img src="img/photo10.jpg" alt="Today, looking forward" class="slide-photo" loading="lazy"
-               onerror="this.src=''; this.classList.add('photo-placeholder')" />
+               onerror="this.classList.add('photo-placeholder')" />
           <div class="photo-placeholder-overlay" aria-hidden="true">
             <svg viewBox="0 0 200 200" fill="none"><rect x="20" y="20" width="160" height="160" rx="4" stroke="#C9A76A" stroke-width="1.5" stroke-dasharray="6 4"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="28" fill="#C9A76A" opacity="0.6">❤</text></svg>
           </div>
@@ -423,7 +465,6 @@ And for me, honestly that person is you.❤️‍🩹✨
 
     </div><!-- /.slides-container -->
 
-    <!-- Navigation -->
     <div class="story-nav" role="navigation" aria-label="Story navigation">
       <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous chapter" disabled>
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -434,7 +475,6 @@ And for me, honestly that person is you.❤️‍🩹✨
       </button>
     </div>
 
-    <!-- Transition wax seal motif between story and proposal -->
     <div class="transition-seal" id="transitionSeal" aria-hidden="true">
       <svg viewBox="0 0 80 80" fill="none">
         <circle cx="40" cy="40" r="36" fill="#7A1F35" stroke="#C9A76A" stroke-width="1.5"/>
@@ -446,9 +486,7 @@ And for me, honestly that person is you.❤️‍🩹✨
   </section><!-- /#storySection -->
 
 
-  <!-- ========================================================
-       SECTION 2.5 — JOURNAL / ANALYSIS (a private page, after Chapter 1)
-       ======================================================== -->
+  <!-- SECTION 2.5 — JOURNAL -->
   <section id="journalSection" class="journal-section hidden" aria-label="A page from his private journal">
     <div class="journal-page">
       <p class="journal-kicker">A page from his private journal</p>
@@ -466,27 +504,27 @@ And for me, honestly that person is you.❤️‍🩹✨
         Continue our story <span aria-hidden="true">→</span>
       </button>
     </div>
-  </section><!-- /#journalSection -->
+  </section>
 
 
-  <!-- ========================================================
-       SECTION 3 — THE PROPOSAL
-       ======================================================== -->
+  <!-- SECTION 3 — THE PROPOSAL -->
   <section id="proposalSection" class="proposal-section hidden" aria-label="The proposal">
-
-    <!-- Dim overlay behind proposal text -->
     <div class="proposal-overlay" aria-hidden="true"></div>
-
+    <div class="proposal-petals" id="proposalPetals" aria-hidden="true"></div>
     <div class="proposal-content">
-      <!-- Slow-draw question in script font -->
+      <div class="ring-svg-wrap" aria-hidden="true">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="30" stroke="#C9A76A" stroke-width="2" stroke-dasharray="6 3"/>
+          <circle cx="40" cy="40" r="22" stroke="#C9A76A" stroke-width="1" opacity="0.5"/>
+          <circle cx="40" cy="18" r="6" fill="#7A1F35" stroke="#C9A76A" stroke-width="1.5"/>
+          <path d="M34 18 Q40 10 46 18" stroke="#C9A76A" stroke-width="1" fill="none"/>
+          <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Great Vibes,cursive" font-size="18" fill="#C9A76A">♥</text>
+        </svg>
+      </div>
       <div class="proposal-question-wrap" aria-label="Proposal question">
         <p class="proposal-her-name" aria-label="Dipali,">Dipali,</p>
-        <p class="proposal-question" id="proposalQuestion" aria-label="Will you marry me?">
-          <!-- Characters injected by JS for letter-by-letter animation -->
-        </p>
+        <p class="proposal-question" id="proposalQuestion" aria-label="Will you marry me?"></p>
       </div>
-
-      <!-- Buttons -->
       <div class="proposal-buttons" id="proposalButtons" aria-label="Your answer">
         <button class="answer-btn yes-btn" id="yesBtn" aria-label="Yes — I will marry you">
           <span class="yes-text">Yes ✦</span>
@@ -496,25 +534,15 @@ And for me, honestly that person is you.❤️‍🩹✨
           No
         </button>
       </div>
-
-      <!-- Playful "oops" message when No is attempted -->
       <p class="no-oops" id="noOops" aria-live="polite"></p>
     </div>
+  </section>
 
-  </section><!-- /#proposalSection -->
 
-
-  <!-- ========================================================
-       SECTION 4 — CELEBRATION
-       ======================================================== -->
+  <!-- SECTION 4 — CELEBRATION -->
   <section id="celebrationSection" class="celebration-section hidden" aria-label="Celebration">
-
-    <!-- Confetti canvas -->
     <canvas id="confettiCanvas" aria-hidden="true"></canvas>
-
     <div class="celebration-content">
-
-      <!-- Opening flourish -->
       <div class="celeb-ornament" aria-hidden="true">
         <svg viewBox="0 0 280 30" fill="none">
           <line x1="0" y1="15" x2="95" y2="15" stroke="#C9A76A" stroke-width="0.8"/>
@@ -542,13 +570,11 @@ And for me, honestly that person is you.❤️‍🩹✨
         </p>
       </div>
 
-      <!-- Signature -->
       <div class="celeb-signature-wrap" aria-label="Signed">
         <p class="celeb-signature">Kunal</p>
         <div class="signature-underline" aria-hidden="true"></div>
       </div>
 
-      <!-- Final wax-seal motif -->
       <div class="celeb-seal" aria-hidden="true">
         <svg viewBox="0 0 100 100" fill="none">
           <circle cx="50" cy="50" r="45" fill="#7A1F35" stroke="#C9A76A" stroke-width="1.5"/>
@@ -558,26 +584,18 @@ And for me, honestly that person is you.❤️‍🩹✨
           <line x1="38" y1="51" x2="62" y2="51" stroke="#C9A76A" stroke-width="0.8"/>
         </svg>
       </div>
-
-    </div><!-- /.celebration-content -->
-
-  </section><!-- /#celebrationSection -->
+    </div>
+  </section>
 
 
-  <!-- ========================================================
-       SECTION 5 — FINAL DECISION
-       ======================================================== -->
+  <!-- SECTION 5 — FINAL DECISION -->
   <section id="finalSection" class="final-section hidden" aria-label="Final decision">
-
     <div class="final-content">
-
-      <!-- Question -->
       <div class="final-question-wrap">
         <h1 class="final-question" id="finalQuestion">So… will you marry me?</h1>
         <p class="final-subtext" id="finalSubtext">This is your moment. Take all the time you need.</p>
       </div>
 
-      <!-- Yes/No Buttons -->
       <div class="final-buttons" id="finalButtons">
         <button class="final-btn final-yes-btn" id="finalYesBtn" aria-label="Yes">
           <span class="final-btn-text">Yes ✨</span>
@@ -586,19 +604,13 @@ And for me, honestly that person is you.❤️‍🩹✨
           <span class="final-btn-text">No</span>
         </button>
       </div>
-
-    </div><!-- /.final-content -->
-
-  </section><!-- /#finalSection -->
+    </div>
+  </section>
 
 
-  <!-- ========================================================
-       SECTION 6 — YES RESPONSE (Video)
-       ======================================================== -->
+  <!-- SECTION 6 — YES RESPONSE (Video) -->
   <section id="yesSection" class="yes-section hidden" aria-label="Yes response">
-    
     <div class="yes-content">
-      
       <div class="yes-message-wrap">
         <h1 class="yes-heading">Forever Starts Now ❤️</h1>
         <p class="yes-message" id="yesMessage">You've made me the happiest person alive. This is just the beginning of our forever.</p>
@@ -615,19 +627,13 @@ And for me, honestly that person is you.❤️‍🩹✨
         <p class="signature-text">With all my love,</p>
         <p class="signature-name">Kunal ❤️</p>
       </div>
-
     </div>
+  </section>
 
-  </section><!-- /#yesSection -->
 
-
-  <!-- ========================================================
-       SECTION 7 — NO RESPONSE (Emotional farewell)
-       ======================================================== -->
+  <!-- SECTION 7 — NO RESPONSE (Emotional farewell) -->
   <section id="noSection" class="no-section hidden" aria-label="No response">
-    
     <div class="no-content">
-      
       <div class="no-ornament" aria-hidden="true">
         <svg viewBox="0 0 280 30" fill="none">
           <line x1="0" y1="15" x2="95" y2="15" stroke="#7A1F35" stroke-width="0.8" opacity="0.5"/>
@@ -638,9 +644,7 @@ And for me, honestly that person is you.❤️‍🩹✨
 
       <h1 class="no-heading" id="noHeading">I Understand, and I Respect Your Heart</h1>
 
-      <div class="no-letter" id="noLetter">
-        <!-- Populated by JS -->
-      </div>
+      <div class="no-letter" id="noLetter"></div>
 
       <div class="no-signature">
         <p class="no-signature-text">With love and respect always,</p>
@@ -654,12 +658,16 @@ And for me, honestly that person is you.❤️‍🩹✨
           <line x1="185" y1="15" x2="280" y2="15" stroke="#7A1F35" stroke-width="0.8" opacity="0.5"/>
         </svg>
       </div>
-
     </div>
+  </section>
 
-  </section><!-- /#noSection -->
-
-
+  <!-- Image Loading Enhancement -->
+  <script src="js/image-loader.js"></script>
+  
+  <!-- Enhanced Lightbox with Zoom -->
+  <script src="js/enhanced-lightbox.js"></script>
+  
+  <!-- Main Application Script -->
   <script src="js/script-new.js"></script>
 </body>
 </html>
